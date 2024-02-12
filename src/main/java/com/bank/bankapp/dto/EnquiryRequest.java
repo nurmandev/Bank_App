@@ -6,12 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class BankResponse {
-
-    private String responseCode;
-    private String responseMessage;
-    private AccountInfo accountInfo;
+public class EnquiryRequest {
+    private String AccountNumber;
 }
