@@ -14,11 +14,16 @@ public class AccountUtils {
 	public static final String ACCOUNT_CREDIT_SUCCESS = "003";
 	public static final String ACCOUNT_CREDIT_MESSAGE = "Transfer has been successfully";
 	
-	public static final String ACCOUNT_NOT_EXISTS_CODE = "401";
-	public static final String ACCOUNT_NOT_EXISTS_MESSAGE = "Account doesn't exist";
+	public static final String ACCOUNT_NOT_EXISTS_CODE = "005";
+	public static final String ACCOUNT_NOT_EXISTS_MESSAGE = "User with provided Account number doesn't exist";
 	
+	public static final String INSUFFICIENT_BALANCE_CODE = "006";
+	public static final String INSUFFICIENT_BALANCE_MESSAGE = "Insufficient balance";
 	
-	public static final String ACCOUNT_FOUND_CODE = "002";
+	public static final String ACCOUNT_DEBIT_SUCCESS = "007";
+	public static final String ACCOUNT_DEBIT_MESSAGE = "Account has been successfully debited";
+	
+	public static final String ACCOUNT_FOUND_CODE = "004";
 	public static final String ACCOUNT_FOUND_SUCCESS = "Account found successfully";
 	
 	public static String generateAccountNumber() {
