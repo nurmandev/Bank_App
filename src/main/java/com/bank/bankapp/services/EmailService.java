@@ -1,7 +1,7 @@
-// package com.bank.bankapp.services;
+package com.bank.bankapp.services;
 
-// import com.bank.bankapp.dto.EmailDetails;
+import com.bank.bankapp.dto.EmailDetails;
 
-// public interface EmailService {
-//     void sendEmailAlert(EmailDetails emailDetails);
-// }
+public interface EmailService {
+    void sendEmailAlert(EmailDetails emailDetails);
+}

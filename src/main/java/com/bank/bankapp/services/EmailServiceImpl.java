@@ -1,38 +1,38 @@
-// package com.bank.bankapp.services;
+package com.bank.bankapp.services;
 
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.beans.factory.annotation.Value;
-// import org.springframework.mail.MailException;
-// import org.springframework.mail.SimpleMailMessage;
-// import org.springframework.mail.javamail.JavaMailSender;
-// import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 
-// import com.bank.bankapp.dto.EmailDetails;
+import com.bank.bankapp.dto.EmailDetails;
 
-// @Service
-// public class EmailServiceImpl implements EmailService{
-
-
-//     @Autowired
-//     private JavaMailSender javaMailSender;
-
-//     @Value("${spring.mail.username}")
-//     private String senderEmail;
+@Service
+public class EmailServiceImpl implements EmailService{
 
 
-//     @Override
-//     public void sendEmailAlert(EmailDetails emailDetails) {
-//         try {
-//             SimpleMailMessage mailMessage = new SimpleMailMessage();
-//             mailMessage.setFrom(senderEmail);
-//             mailMessage.setTo(emailDetails.getRecipient());
-//             mailMessage.setText(emailDetails.getMessageBody());
-//             mailMessage.setSubject(emailDetails.getSubject());
+    @Autowired
+    private JavaMailSender javaMailSender;
 
-//             javaMailSender.send(mailMessage);
-//             System.out.println("Mail sent successfully");
-//         } catch (MailException e) {
-//             throw new RuntimeException(e);
-//         }
-//     }
-// }
+    @Value("${spring.mail.username}")
+    private String senderEmail;
+
+
+    @Override
+    public void sendEmailAlert(EmailDetails emailDetails) {
+        try {
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setFrom(senderEmail);
+            mailMessage.setTo(emailDetails.getRecipient());
+            mailMessage.setText(emailDetails.getMessageBody());
+            mailMessage.setSubject(emailDetails.getSubject());
+
+            javaMailSender.send(mailMessage);
+            System.out.println("Mail sent successfully");
+        } catch (MailException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}

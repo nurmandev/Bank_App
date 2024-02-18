@@ -25,8 +25,8 @@ public class UserServiceImplementation  implements UserService  {
 	@Autowired
 	UserRepository userRepository;
 
-	// @Autowired
-	// EmailService emailService;
+	@Autowired
+	EmailService emailService;
 
     
 	 @Override
@@ -66,14 +66,14 @@ public class UserServiceImplementation  implements UserService  {
 //			Email Service Alert
 
 
-		//  EmailDetails emailDetails = EmailDetails.builder()
-		// 		 .recipient(savedUser.getEmail())
-		// 		 .subject("ACCOUNT CREATION")
-		// 		 .messageBody("Congratulation! your Account has been Successfully Created."
-		// 		 )
-		// 		 .build();
+		 EmailDetails emailDetails = EmailDetails.builder()
+				 .recipient(savedUser.getEmail())
+				 .subject("ACCOUNT CREATION")
+				 .messageBody("Congratulation! your Account has been Successfully Created."
+				 )
+				 .build();
 
-		//  emailService.sendEmailAlert(emailDetails);
+		 emailService.sendEmailAlert(emailDetails);
 
 //		 Return a response
 
@@ -209,14 +209,14 @@ public class UserServiceImplementation  implements UserService  {
 		String sourceUserName = sourceAccountUser.getAccountNumber() + " " + sourceAccountUser.getLastName();
 		userRepository.save(sourceAccountUser);
 
-		// EmailDetails debitAlert = EmailDetails.builder()
-		// 	.subject("DEBIT ALERT")
-		// 	.recipient(sourceAccountUser.getEmail())
-		// 	.messageBody("The sum of "+ request.getAmount() + "has been deducted from your current balance"
-		// 	 + sourceAccountUser.getAccountBalance())
-		// 	.build();
+		EmailDetails debitAlert = EmailDetails.builder()
+			.subject("DEBIT ALERT")
+			.recipient(sourceAccountUser.getEmail())
+			.messageBody("The sum of "+ request.getAmount() + "has been deducted from your current balance"
+			 + sourceAccountUser.getAccountBalance())
+			.build();
 
-		// emailService.sendEmailAlert(debitAlert);
+		emailService.sendEmailAlert(debitAlert);
 
 		System.out.println("The sum of "+ request.getAmount() + "has been deducted from your current balance" + sourceAccountUser.getAccountBalance());
 		User destinationAccountUser = userRepository.findByAccountNumber(request.getDestinationAccountNumer());
@@ -225,14 +225,14 @@ public class UserServiceImplementation  implements UserService  {
 		// String recipientUserName = destinationAccountUser.getFirstName() + " " + destinationAccountUser.getLastName();
 		userRepository.save(destinationAccountUser);
 
-		// EmailDetails creditAlert = EmailDetails.builder()
-		// 	.subject("CREDIT ALERT")
-		// 	.recipient(sourceAccountUser.getEmail())
-		// 	.messageBody("The sum of "+ request.getAmount() + "has been sent to your account from "
-		// 	 + sourceUserName)
-		// 	.build();
+		EmailDetails creditAlert = EmailDetails.builder()
+			.subject("CREDIT ALERT")
+			.recipient(sourceAccountUser.getEmail())
+			.messageBody("The sum of "+ request.getAmount() + "has been sent to your account from "
+			 + sourceUserName)
+			.build();
 
-		// emailService.sendEmailAlert(debitAlert);
+		emailService.sendEmailAlert(debitAlert);
 
 		System.out.println("The sum of "+ " " + request.getAmount() + "has been sent to your account from "  + sourceUserName);
 		return BankResponse.builder()
