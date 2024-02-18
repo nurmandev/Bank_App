@@ -25,6 +25,9 @@ public class AccountUtils {
 	
 	public static final String ACCOUNT_FOUND_CODE = "004";
 	public static final String ACCOUNT_FOUND_SUCCESS = "Account found successfully";
+
+	public static final String TRANSFER_SUCCESSFUl_CODE = "008";
+	public static final String TRANSFER_SUCCESSFULLY_MESSAGE = "Transfer successfully";
 	
 	public static String generateAccountNumber() {
 		/**

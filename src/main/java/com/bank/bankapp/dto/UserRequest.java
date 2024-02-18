@@ -1,6 +1,5 @@
 package com.bank.bankapp.dto;
 
-import java.math.BigDecimal;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

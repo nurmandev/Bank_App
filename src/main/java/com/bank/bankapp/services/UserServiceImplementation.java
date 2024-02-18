@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import com.bank.bankapp.dto.AccountInfo;
 import com.bank.bankapp.dto.BankResponse;
 import com.bank.bankapp.dto.CreditDebitRequest;
+import com.bank.bankapp.dto.EmailDetails;
 import com.bank.bankapp.dto.EnquiryRequest;
+import com.bank.bankapp.dto.TransferRequest;
 import com.bank.bankapp.dto.UserRequest;
 import com.bank.bankapp.entity.User;
 import com.bank.bankapp.repository.UserRepository; 
@@ -178,5 +180,64 @@ public class UserServiceImplementation  implements UserService  {
 			.accountBalance(userToDebit.getAccountBalance())
 			.build())
 			.build();
+	}
+
+	@Override
+	public BankResponse transfer(TransferRequest request) {
+		// get the account to debit (check if it's exists)
+		// check if the amount I'm debiting is not more than the current balance
+		// debit the account
+		// get the account to debit
+		// cretid the account
+		boolean isDestinationAccountExist = userRepository.existsByAccountNumber(request.getDestinationAccountNumer());
+		if (!isDestinationAccountExist) {
+			return BankResponse.builder()
+			.responseCode(AccountUtils.ACCOUNT_NOT_EXISTS_CODE)
+			.responseMessage(AccountUtils.ACCOUNT_NOT_EXISTS_MESSAGE)
+			.accountInfo(null).build();			
+		}
+
+		User sourceAccountUser = userRepository.findByAccountNumber(request.getSourceAccountNumber());
+		if (request.getAmount().compareTo(sourceAccountUser.getAccountBalance()) > 0) {
+			return BankResponse.builder()
+					.responseCode(AccountUtils.INSUFFICIENT_BALANCE_CODE)
+					.responseMessage(AccountUtils.INSUFFICIENT_BALANCE_MESSAGE)
+					.accountInfo(null)
+		.build();
+		}
+		sourceAccountUser.setAccountBalance(sourceAccountUser.getAccountBalance().subtract(request.getAmount()));
+		String sourceUserName = sourceAccountUser.getAccountNumber() + " " + sourceAccountUser.getLastName();
+		userRepository.save(sourceAccountUser);
+
+		// EmailDetails debitAlert = EmailDetails.builder()
+		// 	.subject("DEBIT ALERT")
+		// 	.recipient(sourceAccountUser.getEmail())
+		// 	.messageBody("The sum of "+ request.getAmount() + "has been deducted from your current balance"
+		// 	 + sourceAccountUser.getAccountBalance())
+		// 	.build();
+
+		// emailService.sendEmailAlert(debitAlert);
+
+		System.out.println("The sum of "+ request.getAmount() + "has been deducted from your current balance" + sourceAccountUser.getAccountBalance());
+		User destinationAccountUser = userRepository.findByAccountNumber(request.getDestinationAccountNumer());
+		destinationAccountUser.setAccountBalance(destinationAccountUser.getAccountBalance().add(request.getAmount()));
+
+		// String recipientUserName = destinationAccountUser.getFirstName() + " " + destinationAccountUser.getLastName();
+		userRepository.save(destinationAccountUser);
+
+		// EmailDetails creditAlert = EmailDetails.builder()
+		// 	.subject("CREDIT ALERT")
+		// 	.recipient(sourceAccountUser.getEmail())
+		// 	.messageBody("The sum of "+ request.getAmount() + "has been sent to your account from "
+		// 	 + sourceUserName)
+		// 	.build();
+
+		// emailService.sendEmailAlert(debitAlert);
+
+		System.out.println("The sum of "+ " " + request.getAmount() + "has been sent to your account from "  + sourceUserName);
+		return BankResponse.builder()
+		.responseCode(AccountUtils.TRANSFER_SUCCESSFUl_CODE)
+			.responseMessage(AccountUtils.TRANSFER_SUCCESSFULLY_MESSAGE)
+			.accountInfo(null).build();		
 	}
 }
