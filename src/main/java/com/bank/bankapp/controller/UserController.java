@@ -14,42 +14,106 @@ import com.bank.bankapp.dto.TransferRequest;
 import com.bank.bankapp.dto.UserRequest;
 import com.bank.bankapp.services.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/user")
+@Tag(name = "user controller Management APIs")
+
+
 public class UserController {
 	@Autowired
 	UserService userService;
-	
+
+	@Operation(
+		summary = "Hello world",
+		description = "Check if server is running"
+	)
+	@ApiResponse(
+		responseCode = "200",
+		description = "Http service 200"
+	)
 	@GetMapping
 	public String getAccount() {
 		return "Hello";
 	}
 
+
+	@Operation(
+		summary = "Create New user Account",
+		description = "Creating a new user Account and assigning account ID"
+	)
+	@ApiResponse(
+		responseCode = "201",
+		description = "Http service 201 CREATED"
+	)
 	@PostMapping
 	public BankResponse createAccount(@RequestBody  UserRequest userRequest) {
 		return userService.createAccount(userRequest);
 	}
 
+	@Operation(
+		summary = "Balance Enquiry",
+		description = "Given an Account number and Check how much the user has"
+	)
+	@ApiResponse(
+		responseCode = "200",
+		description = "Http service 200 SUCCESS"
+	)
 	@GetMapping("balanceEnquiry")
 	public BankResponse balanceEnquiry(@RequestBody EnquiryRequest request ){
 		return userService.balanceEnquiry(request);
 	}
 
+	@Operation(
+		summary = "Name Enquiry",
+		description = "use an Account number to check the user name"
+	)
+	@ApiResponse(
+		responseCode = "200",
+		description = "Http service 200 SUCCESS"
+	)
 	@GetMapping("nameEnquiry")
 	public String nameEnquiry(@RequestBody EnquiryRequest request){
 		return userService.nameEnquiry(request);
 	}
 
+	@Operation(
+		summary = "Credit",
+		description = "Deposit money to user Account number"
+	)
+	@ApiResponse(
+		responseCode = "200",
+		description = "Http service 200 SUCCESS"
+	)
 	@PostMapping("credit")
 	public BankResponse creditAccount(@RequestBody CreditDebitRequest request){
 		return userService.creditAccount(request);
 	}
 
+	@Operation(
+		summary = "Debit",
+		description = "Given an Account number to debit the user"
+	)
+	@ApiResponse(
+		responseCode = "200",
+		description = "Http service 200 SUCCESS"
+	)
 	@PostMapping("debit")
 	public BankResponse debitAccount(@RequestBody CreditDebitRequest request){
 		return userService.debitAccount(request);
 	}
 
+	@Operation(
+		summary = "Transfer",
+		description = "Transfer money to another user, using an account number"
+	)
+	@ApiResponse(
+		responseCode = "200",
+		description = "Http service 200 SUCCESS"
+	)
 	@PostMapping("transfer")
 	public BankResponse transfer(@RequestBody TransferRequest request){
 		return userService.transfer(request);
