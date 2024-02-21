@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.info.License;
 @SpringBootApplication
 @OpenAPIDefinition(
 	info = @Info(
-		title = "Banking Application APIs",
+		title = "NURMAN Banking Application APIs",
 		description = "Bankend Rest APIs for Banking application",
 		version = "v1.0",
 		contact = @Contact(
@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.info.License;
 		)
 	),
 	externalDocs = @ExternalDocumentation(
-		description = "Complete Backend APIs documentation",
+		description = "NURMAN Banking Application Backend APIs documentation",
 		url = "https://github.com/Adebayour66265/Bank_App"
 	)
 )

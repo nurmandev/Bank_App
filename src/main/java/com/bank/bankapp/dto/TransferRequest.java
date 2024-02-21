@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 public class TransferRequest {
     private String sourceAccountNumber;
-    private String destinationAccountNumer;
+    private String destinationAccountNumber;
     private BigDecimal amount;
 
 }
