@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.bank.bankapp.dto.AccountInfo;
 import com.bank.bankapp.dto.BankResponse;
 import com.bank.bankapp.dto.CreditDebitRequest;
-// import com.bank.bankapp.dto.EmailDetails;
+import com.bank.bankapp.dto.EmailDetails;
 import com.bank.bankapp.dto.EnquiryRequest;
 import com.bank.bankapp.dto.TransactionDto;
 import com.bank.bankapp.dto.TransferRequest;
@@ -70,14 +70,14 @@ public class UserServiceImplementation  implements UserService  {
 //			Email Service Alert
 
 
-		//  EmailDetails emailDetails = EmailDetails.builder()
-		// 		 .recipient(savedUser.getEmail())
-		// 		 .subject("ACCOUNT CREATION")
-		// 		 .messageBody("Congratulation! your Account has been Successfully Created."
-		// 		 )
-		// 		 .build();
+		 EmailDetails emailDetails = EmailDetails.builder()
+				 .recipient(savedUser.getEmail())
+				 .subject("ACCOUNT CREATION")
+				 .messageBody("Congratulation! your Account has been Successfully Created."
+				 )
+				 .build();
 
-		//  emailService.sendEmailAlert(emailDetails);
+		 emailService.sendEmailAlert(emailDetails);
 
 //		 Return a response
 
@@ -140,6 +140,16 @@ public class UserServiceImplementation  implements UserService  {
 		userToCredit.setAccountBalance(userToCredit.getAccountBalance().add(request.getAmount()));
 		userRepository.save(userToCredit);
 
+			// Send Email
+		EmailDetails creditAlert = EmailDetails.builder()
+			.subject("CREDIT ALERT")
+			.recipient(userToCredit.getEmail())
+			.messageBody("The sum of "+ request.getAmount() + "has been deposit to your account from "
+			+ userToCredit.getFirstName())
+			.build();
+
+		emailService.sendEmailAlert(creditAlert);
+
 		//  Save Transaction
 		TransactionDto transactionDto = TransactionDto.builder()
 		.accountNumber(userToCredit.getAccountNumber())
@@ -149,6 +159,8 @@ public class UserServiceImplementation  implements UserService  {
 
 
 		transactionServices.saveTransaction(transactionDto);
+
+	
 
 
 		return BankResponse.builder()
@@ -236,31 +248,32 @@ public class UserServiceImplementation  implements UserService  {
 		String sourceUserName = sourceAccountUser.getAccountNumber() + " " + sourceAccountUser.getLastName();
 		userRepository.save(sourceAccountUser);
 
-		// EmailDetails debitAlert = EmailDetails.builder()
-		// 	.subject("DEBIT ALERT")
-		// 	.recipient(sourceAccountUser.getEmail())
-		// 	.messageBody("The sum of "+ request.getAmount() + "has been deducted from your current balance"
-		// 	 + sourceAccountUser.getAccountBalance())
-		// 	.build();
+		// Send Email
+		EmailDetails debitAlert = EmailDetails.builder()
+			.subject("DEBIT ALERT")
+			.recipient(sourceAccountUser.getEmail())
+			.messageBody("The sum of "+ request.getAmount() + "has been deducted from your current balance"
+			 + sourceAccountUser.getAccountBalance())
+			.build();
 
-		// emailService.sendEmailAlert(debitAlert);
+		emailService.sendEmailAlert(debitAlert);
 
 		System.out.println("The sum of "+ request.getAmount() + "has been deducted from your current balance"
  + sourceAccountUser.getAccountBalance());
 		User destinationAccountUser = userRepository.findByAccountNumber(request.getDestinationAccountNumber());
 		destinationAccountUser.setAccountBalance(destinationAccountUser.getAccountBalance().add(request.getAmount()));
 
-		// String recipientUserName = destinationAccountUser.getFirstName() + " " + destinationAccountUser.getLastName();
 		userRepository.save(destinationAccountUser);
 
-		// EmailDetails creditAlert = EmailDetails.builder()
-		// 	.subject("CREDIT ALERT")
-		// 	.recipient(sourceAccountUser.getEmail())
-		// 	.messageBody("The sum of "+ request.getAmount() + "has been sent to your account from "
-		// 	 + sourceUserName)
-		// 	.build();
+		// Send Email
+		EmailDetails creditAlert = EmailDetails.builder()
+			.subject("CREDIT ALERT")
+			.recipient(sourceAccountUser.getEmail())
+			.messageBody("The sum of "+ request.getAmount() + "has been sent to your account from "
+			 + sourceUserName)
+			.build();
 
-		// emailService.sendEmailAlert(debitAlert);
+		emailService.sendEmailAlert(creditAlert);
 
 		System.out.println("The sum of "+ " " +
 		 request.getAmount() + "has been sent to your account from " 
