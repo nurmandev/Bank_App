@@ -1,5 +1,6 @@
 package com.bank.bankapp.controller;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bank.bankapp.entity.Transaction;
 import com.bank.bankapp.services.BankStatement;
+import com.itextpdf.text.DocumentException;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -24,7 +26,7 @@ public class TransactionController {
     @GetMapping
     public List<Transaction> generateStatement(@RequestParam String accountNumber, 
                                                @RequestParam String startDate,
-                                               @RequestParam String endDate){
+                                               @RequestParam String endDate) throws FileNotFoundException, DocumentException{
         return bankStatement.generateStatement(accountNumber, startDate, endDate);
     }
 }
