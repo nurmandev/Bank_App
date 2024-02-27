@@ -6,9 +6,11 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
+import com.bank.bankapp.dto.EmailDetails;
 import com.bank.bankapp.entity.Transaction;
 import com.bank.bankapp.entity.User;
 import com.bank.bankapp.repository.TransactionRepository;
@@ -32,22 +34,41 @@ import lombok.extern.slf4j.Slf4j;
 public class BankStatement {
     private TransactionRepository transactionRepository;
     private UserRepository userRepository;
+    private EmailService emailService;
     private static final String FILE = "C:\\Users\\HI-TECH\\Downloads\\MyStatement.pdf" ;
    
     /**
      * retrive list of Transaction within a date range given an account number
      * generate a pdf file of transactions
      * send the file via email
+     * @throws DocumentException 
      */
     
-     public List<Transaction>generateStatement(String accountNumber, String startDate, String endDate) throws FileNotFoundException, DocumentException{
+     public List<Transaction>generateStatement(String accountNumber, String startDate, String endDate) 
+     throws FileNotFoundException, DocumentException{
+
+
       LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
       LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE);
-  
-        List<Transaction> transactionList = transactionRepository.findAll().stream()
-        .filter(transaction -> transaction.getAccountNumber().equals(accountNumber))
-        .filter(transaction -> transaction.getCreatedAt().isEqual(start))
-        .filter(transaction -> transaction.getCreatedAt().isEqual(end)).toList();
+
+      System.out.println("First log..............");
+System.out.println(start);
+System.out.println(end);
+
+      List<Transaction> transactionList = transactionRepository.findAll().stream()
+            .filter(transaction -> transaction.getAccountNumber().equals(accountNumber))
+            .filter(transaction -> {
+                LocalDate createdAt = transaction.getCreatedAt();
+                return createdAt != null && !createdAt.isBefore(start) && !createdAt.isAfter(end);
+            })
+            .collect(Collectors.toList());
+
+      System.out.println("Second log..............");
+      System.out.println(start);
+      System.out.println(end);
+      System.out.println(transactionList.toString());
+    
+
 
         User user = userRepository.findByAccountNumber(accountNumber);
         String customerName = user.getFirstName() + " " + user.getLastName();
@@ -121,6 +142,15 @@ public class BankStatement {
       document.add(transactionTable);
 
       document.close();
+
+      EmailDetails emailDetails = EmailDetails.builder()
+        .recipient(user.getEmail())
+        .subject("STATEMENT OF ACCOUNT")
+        .messageBody("Kindly find your requested account statement attached!")
+        .attachment(FILE)
+      .build();
+
+      emailService.sendEmailAlert(emailDetails);
 
       return transactionList;
 

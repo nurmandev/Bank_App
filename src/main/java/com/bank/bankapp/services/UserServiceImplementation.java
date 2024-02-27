@@ -144,7 +144,7 @@ public class UserServiceImplementation  implements UserService  {
 		EmailDetails creditAlert = EmailDetails.builder()
 			.subject("CREDIT ALERT")
 			.recipient(userToCredit.getEmail())
-			.messageBody("The sum of "+ request.getAmount() + "has been deposit to your account from "
+			.messageBody("The sum of "+ request.getAmount() + " has been deposit to your account from "
 			+ userToCredit.getFirstName())
 			.build();
 
@@ -252,13 +252,13 @@ public class UserServiceImplementation  implements UserService  {
 		EmailDetails debitAlert = EmailDetails.builder()
 			.subject("DEBIT ALERT")
 			.recipient(sourceAccountUser.getEmail())
-			.messageBody("The sum of "+ request.getAmount() + "has been deducted from your current balance"
-			 + sourceAccountUser.getAccountBalance())
+			.messageBody("The sum of "+ request.getAmount() + " has been deducted from your current balance "
+			 + sourceAccountUser.getAccountBalance() + " To" + sourceUserName)
 			.build();
 
 		emailService.sendEmailAlert(debitAlert);
 
-		System.out.println("The sum of "+ request.getAmount() + "has been deducted from your current balance"
+		System.out.println("The sum of "+ request.getAmount() +  "has been deducted from your current balance "
  + sourceAccountUser.getAccountBalance());
 		User destinationAccountUser = userRepository.findByAccountNumber(request.getDestinationAccountNumber());
 		destinationAccountUser.setAccountBalance(destinationAccountUser.getAccountBalance().add(request.getAmount()));
