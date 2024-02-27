@@ -15,7 +15,6 @@ import com.bank.bankapp.entity.Transaction;
 import com.bank.bankapp.entity.User;
 import com.bank.bankapp.repository.TransactionRepository;
 import com.bank.bankapp.repository.UserRepository;
-import com.itextpdf.awt.geom.Rectangle;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -51,9 +50,7 @@ public class BankStatement {
       LocalDate start = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
       LocalDate end = LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE);
 
-      System.out.println("First log..............");
-System.out.println(start);
-System.out.println(end);
+   
 
       List<Transaction> transactionList = transactionRepository.findAll().stream()
             .filter(transaction -> transaction.getAccountNumber().equals(accountNumber))
@@ -62,12 +59,6 @@ System.out.println(end);
                 return createdAt != null && !createdAt.isBefore(start) && !createdAt.isAfter(end);
             })
             .collect(Collectors.toList());
-
-      System.out.println("Second log..............");
-      System.out.println(start);
-      System.out.println(end);
-      System.out.println(transactionList.toString());
-    
 
 
         User user = userRepository.findByAccountNumber(accountNumber);
@@ -81,7 +72,7 @@ System.out.println(end);
         document.open();
 
         PdfPTable bankInfoTable = new PdfPTable(1);
-        PdfPCell bankName = new PdfPCell(new Phrase("Nurman Bank"));
+        PdfPCell bankName = new PdfPCell(new Phrase("NURMAN Bank"));
         bankName.setBorder(0);
         bankName.setBackgroundColor(BaseColor.PINK);
         bankName.setPadding(20f);
@@ -109,7 +100,7 @@ System.out.println(end);
         PdfPCell date = new PdfPCell(new Phrase("Date"));
         date.setBorder(0);
         PdfPCell transactionType = new PdfPCell(new Phrase("TRANSACTION TYPE"));
-        transactionType.setBackgroundColor(BaseColor.BLACK);
+        transactionType.setBackgroundColor(BaseColor.LIGHT_GRAY);
         transactionType.setBorder(0);
         PdfPCell transactionAmount = new PdfPCell(new Phrase("TRANSACTION AMOUNT"));
         transactionAmount.setBackgroundColor(BaseColor.GREEN);
@@ -150,7 +141,7 @@ System.out.println(end);
         .attachment(FILE)
       .build();
 
-      emailService.sendEmailAlert(emailDetails);
+      emailService.sendEmailWithAttachment(emailDetails);
 
       return transactionList;
 

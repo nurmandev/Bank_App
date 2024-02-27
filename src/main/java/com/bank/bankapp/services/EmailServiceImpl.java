@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.bank.bankapp.dto.EmailDetails;
 
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,6 +46,7 @@ public class EmailServiceImpl implements EmailService{
     }
 
 
+    @SuppressWarnings("null")
     @Override
     public void sendEmailWithAttachment(EmailDetails emailDetails) {
        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -58,11 +60,14 @@ public class EmailServiceImpl implements EmailService{
 
         FileSystemResource file = new FileSystemResource(new File(emailDetails.getAttachment()));
         mimeMessageHelper.addAttachment(file.getFilename(), file);
+        log.info(file.getFilename() + " First test");
 
         javaMailSender.send(mimeMessage);
+
+
         log.info(file.getFilename() + " has been sent to user with email " + emailDetails.getRecipient());
-       } catch (Exception e) {
-        throw new RuntimeException();
+       } catch (MessagingException e) {
+        throw new RuntimeException(e.getMessage());
        } 
     }
 }
