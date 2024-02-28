@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bank.bankapp.dto.AccountInfo;
@@ -29,6 +30,9 @@ public class UserServiceImplementation  implements UserService  {
 	@Autowired
 	TransactionServices transactionServices;
 
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
 	@Autowired
 	EmailService emailService;
 
