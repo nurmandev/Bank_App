@@ -19,8 +19,11 @@ import com.bank.bankapp.entity.User;
 import com.bank.bankapp.repository.UserRepository; 
 import com.bank.bankapp.utils.AccountUtils;
 
+import lombok.AllArgsConstructor;
+
 
 @Service
+@AllArgsConstructor
 public class UserServiceImplementation  implements UserService  {
 
 	@Autowired
@@ -37,6 +40,8 @@ public class UserServiceImplementation  implements UserService  {
 	EmailService emailService;
 
     
+	// REISTER AN ACCOUNT
+
 	 @Override
 	    public BankResponse createAccount(UserRequest userRequest) {
 	        /**
@@ -62,6 +67,7 @@ public class UserServiceImplementation  implements UserService  {
 				 .accountNumber(AccountUtils.generateAccountNumber())
 				 .accountBalance(BigDecimal.ZERO)
 				 .email(userRequest.getEmail())
+				 .password(passwordEncoder.encode(userRequest.getPassword()))
 				 .phoneNumber(userRequest.getPhoneNumber())
 				 .alternativePhoneNumber(userRequest.getAlternativePhoneNumber())
 				 .status("ACTIVE")
@@ -74,15 +80,15 @@ public class UserServiceImplementation  implements UserService  {
 //			Email Service Alert
 
 
-		 EmailDetails emailDetails = EmailDetails.builder()
-				 .recipient(savedUser.getEmail())
-				 .subject("ACCOUNT CREATION")
-				 .messageBody("Dear " + savedUser.getFirstName() + " " + savedUser.getLastName()
-				  +" Congratulation! your Account (number: "+ savedUser.getAccountNumber()+") has been Successfully Created."
-				 )
-				 .build();
+		//  EmailDetails emailDetails = EmailDetails.builder()
+		// 		 .recipient(savedUser.getEmail())
+		// 		 .subject("ACCOUNT CREATION")
+		// 		 .messageBody("Dear " + savedUser.getFirstName() + " " + savedUser.getLastName()
+		// 		  +" Congratulation! your Account (number: "+ savedUser.getAccountNumber()+") has been Successfully Created."
+		// 		 )
+		// 		 .build();
 
-		 emailService.sendEmailAlert(emailDetails);
+		//  emailService.sendEmailAlert(emailDetails);
 
 //		 Return a response
 
@@ -96,6 +102,12 @@ public class UserServiceImplementation  implements UserService  {
 						 .build())
 				 .build();
 	 }
+
+
+
+	// BALANCE ENQUIRY
+
+
 
 	 @Override
 	 public BankResponse balanceEnquiry(EnquiryRequest request){
@@ -120,6 +132,11 @@ public class UserServiceImplementation  implements UserService  {
 		.build();
 	 }
 
+
+	// NAME ENQUIRY
+
+
+
 	@Override
 	public String nameEnquiry(EnquiryRequest request) {
 		// Check name exists in the database
@@ -130,6 +147,11 @@ public class UserServiceImplementation  implements UserService  {
 		User foundUser = userRepository.findByAccountNumber(request.getAccountNumber());
 		return foundUser.getFirstName() + " " + foundUser.getLastName();
 	}
+
+
+
+	// CREDIT ACCOUNT
+
 
 	@Override
 	public BankResponse creditAccount(CreditDebitRequest request) {
@@ -180,6 +202,8 @@ public class UserServiceImplementation  implements UserService  {
 		.build();
 	}
 
+	// DEBIT ACCOUNT
+
 	@Override
 	public BankResponse debitAccount(CreditDebitRequest request) {
 		boolean isAccountExist = userRepository.existsByAccountNumber(request.getAccountNumber());
@@ -225,6 +249,8 @@ public class UserServiceImplementation  implements UserService  {
 			.build())
 			.build();
 	}
+
+	// TRANSFER
 
 	@Override
 	public BankResponse transfer(TransferRequest request) {
