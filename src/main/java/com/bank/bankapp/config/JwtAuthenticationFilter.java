@@ -1,13 +1,13 @@
-package com.bank.bankapp.config;
+// package com.bank.bankapp.config;
 
-import org.springframework.web.filter.OncePerRequestFilter;
+// import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.bank.bankapp.dto.UserRequest;
+// import com.bank.bankapp.dto.UserRequest;
 
-public class JwtAuthenticationFilter extends OncePerRequestFilter{
+// public class JwtAuthenticationFilter extends OncePerRequestFilter{
     
-    private JwtTokenProvider jwtTokenProvider;
-    private UserRequest userRequest;
+//     private JwtTokenProvider jwtTokenProvider;
+//     private UserRequest userRequest;
 
 
-}
+// }
