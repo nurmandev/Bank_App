@@ -1,14 +1,22 @@
-// package com.bank.bankapp.services;
+package com.bank.bankapp.services;
 
-// import org.springframework.security.core.userdetails.UserDetails;
-// import org.springframework.security.core.userdetails.UserDetailsService;
-// import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-// public class CustomeUserDetailsServices implements UserDetailsService{
+import com.bank.bankapp.repository.UserRepository;
 
-//     @Override
-//     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        return null;
-//     }
+import lombok.AllArgsConstructor;
+
+@Service
+@AllArgsConstructor
+public class CustomeUserDetailsServices implements UserDetailsService{
+
+    private UserRepository userRepository;
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+       return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException( username + " not found"));
+    }
     
-// }
+}

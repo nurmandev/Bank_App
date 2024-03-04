@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,7 @@ import com.bank.bankapp.dto.BankResponse;
 import com.bank.bankapp.dto.CreditDebitRequest;
 import com.bank.bankapp.dto.EmailDetails;
 import com.bank.bankapp.dto.EnquiryRequest;
+import com.bank.bankapp.dto.LoginDto;
 import com.bank.bankapp.dto.TransactionDto;
 import com.bank.bankapp.dto.TransferRequest;
 import com.bank.bankapp.dto.UserRequest;
@@ -35,6 +39,9 @@ public class UserServiceImplementation  implements UserService  {
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
+
+	@Autowired
+	AuthenticationManager authenticationManager;
 	
 	@Autowired
 	EmailService emailService;
@@ -80,15 +87,15 @@ public class UserServiceImplementation  implements UserService  {
 //			Email Service Alert
 
 
-		//  EmailDetails emailDetails = EmailDetails.builder()
-		// 		 .recipient(savedUser.getEmail())
-		// 		 .subject("ACCOUNT CREATION")
-		// 		 .messageBody("Dear " + savedUser.getFirstName() + " " + savedUser.getLastName()
-		// 		  +" Congratulation! your Account (number: "+ savedUser.getAccountNumber()+") has been Successfully Created."
-		// 		 )
-		// 		 .build();
+		 EmailDetails emailDetails = EmailDetails.builder()
+				 .recipient(savedUser.getEmail())
+				 .subject("ACCOUNT CREATION")
+				 .messageBody("Dear " + savedUser.getFirstName() + " " + savedUser.getLastName()
+				  +" Congratulation! your Account (number: "+ savedUser.getAccountNumber()+") has been Successfully Created."
+				 )
+				 .build();
 
-		//  emailService.sendEmailAlert(emailDetails);
+		 emailService.sendEmailAlert(emailDetails);
 
 //		 Return a response
 
@@ -103,12 +110,17 @@ public class UserServiceImplementation  implements UserService  {
 				 .build();
 	 }
 
+	//  LOGIN 
+	public BankResponse login(LoginDto loginDto){
+		Authentication authentication = null;
+		authentication = authenticationManager.authenticate(
+			new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
+		);
+
+	}
 
 
 	// BALANCE ENQUIRY
-
-
-
 	 @Override
 	 public BankResponse balanceEnquiry(EnquiryRequest request){
 		// Check if provided account number exists in the database
@@ -229,6 +241,16 @@ public class UserServiceImplementation  implements UserService  {
 			userToDebit.setAccountBalance(userToDebit.getAccountBalance().subtract(request.getAmount()));
 			userRepository.save(userToDebit);
 		}
+
+			// Send Email
+			EmailDetails debitAlert = EmailDetails.builder()
+			.subject("DEBIT ALERT")
+			.recipient(userToDebit.getEmail())
+			.messageBody("The sum of "+ request.getAmount() + " has been debited from your account to "
+			+ request.getAccountNumber())
+			.build();
+
+		emailService.sendEmailAlert(debitAlert);
 
 		//  Save Transaction
 		TransactionDto transactionDto = TransactionDto.builder()
