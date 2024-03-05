@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.bank.bankapp.config.JwtTokenProvider;
 import com.bank.bankapp.dto.AccountInfo;
 import com.bank.bankapp.dto.BankResponse;
 import com.bank.bankapp.dto.CreditDebitRequest;
@@ -19,6 +20,7 @@ import com.bank.bankapp.dto.LoginDto;
 import com.bank.bankapp.dto.TransactionDto;
 import com.bank.bankapp.dto.TransferRequest;
 import com.bank.bankapp.dto.UserRequest;
+import com.bank.bankapp.entity.Role;
 import com.bank.bankapp.entity.User;
 import com.bank.bankapp.repository.UserRepository; 
 import com.bank.bankapp.utils.AccountUtils;
@@ -42,6 +44,9 @@ public class UserServiceImplementation  implements UserService  {
 
 	@Autowired
 	AuthenticationManager authenticationManager;
+
+	@Autowired
+	JwtTokenProvider jwtTokenProvider;
 	
 	@Autowired
 	EmailService emailService;
@@ -78,6 +83,7 @@ public class UserServiceImplementation  implements UserService  {
 				 .phoneNumber(userRequest.getPhoneNumber())
 				 .alternativePhoneNumber(userRequest.getAlternativePhoneNumber())
 				 .status("ACTIVE")
+				 .role(Role.valueOf("ROLE_USER"))
 				 .build();
 
 
@@ -91,7 +97,8 @@ public class UserServiceImplementation  implements UserService  {
 				 .recipient(savedUser.getEmail())
 				 .subject("ACCOUNT CREATION")
 				 .messageBody("Dear " + savedUser.getFirstName() + " " + savedUser.getLastName()
-				  +" Congratulation! your Account (number: "+ savedUser.getAccountNumber()+") has been Successfully Created."
+				  +" Congratulation! your Account (number: "+
+				   savedUser.getAccountNumber()+") with password( "  +" ) has been Successfully Created."
 				 )
 				 .build();
 
@@ -105,7 +112,7 @@ public class UserServiceImplementation  implements UserService  {
 				 .accountInfo(AccountInfo.builder()
 						 .accountBalance(savedUser.getAccountBalance())
 						 .accountNumber(savedUser.getAccountNumber())
-						 .accountName(savedUser.getFirstName() + " " + savedUser.getLastName() + " " + savedUser.getOtherName())
+						 .accountName(savedUser.getFirstName() + " " + savedUser.getLastName())
 						 .build())
 				 .build();
 	 }
@@ -113,10 +120,21 @@ public class UserServiceImplementation  implements UserService  {
 	//  LOGIN 
 	public BankResponse login(LoginDto loginDto){
 		Authentication authentication = null;
-		authentication = authenticationManager.authenticate(
-			new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
+		authentication = (Authentication) authenticationManager.authenticate(
+			new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
 		);
 
+		EmailDetails loginAlert = EmailDetails.builder()
+		.subject("You're logged in")
+		.recipient(loginDto.getEmail())
+		.messageBody("You logged into your account. if you did not initiate this request, please contact your bank")
+		.build();
+
+		emailService.sendEmailAlert(loginAlert);
+		return BankResponse.builder()
+		.responseCode("Login success")
+		.responseMessage(jwtTokenProvider.generateToken(authentication))
+		.build();
 	}
 
 

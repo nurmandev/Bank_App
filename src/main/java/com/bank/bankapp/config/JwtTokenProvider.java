@@ -2,7 +2,6 @@ package com.bank.bankapp.config;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.Base64.Decoder;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
@@ -20,11 +19,11 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtTokenProvider {
 
-    @Value("app.jwt-secret")
+    @Value("${app.jwt-secret}")
     private String jwtSecret;
 
 
-    @Value("app.jwt-expiration")
+    @Value("${app.jwt-expiration}")
     private long jwtExpirationDate;
 
     @SuppressWarnings("deprecation")

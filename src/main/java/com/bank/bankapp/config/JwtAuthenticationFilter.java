@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.bank.bankapp.dto.UserRequest;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +23,6 @@ import lombok.NonNull;
 public class JwtAuthenticationFilter extends OncePerRequestFilter{
     
     private JwtTokenProvider jwtTokenProvider;
-    private UserRequest userRequest;
     private UserDetailsService userDetailsService;
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)

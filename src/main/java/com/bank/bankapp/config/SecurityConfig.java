@@ -29,7 +29,7 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    private PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
@@ -49,13 +49,15 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "/api/user").permitAll()
+        .authorizeHttpRequests(authorize -> authorize
+        .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
+        .requestMatchers(HttpMethod.POST, "/api/user/login").permitAll()
         .anyRequest().authenticated());
         
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.authenticationProvider(authenticationProvider());
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        
+
         return httpSecurity.build();
     }
 }
