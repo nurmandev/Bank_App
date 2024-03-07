@@ -3,7 +3,6 @@ package com.bank.bankapp.services;
 import com.bank.bankapp.dto.BankResponse;
 import com.bank.bankapp.dto.CreditDebitRequest;
 import com.bank.bankapp.dto.EnquiryRequest;
-import com.bank.bankapp.dto.GetAllUsers;
 import com.bank.bankapp.dto.LoginDto;
 import com.bank.bankapp.dto.TransferRequest;
 import com.bank.bankapp.dto.UserRequest;

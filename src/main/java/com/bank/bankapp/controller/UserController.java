@@ -1,5 +1,7 @@
 package com.bank.bankapp.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +16,7 @@ import com.bank.bankapp.dto.GetAllUsers;
 import com.bank.bankapp.dto.LoginDto;
 import com.bank.bankapp.dto.TransferRequest;
 import com.bank.bankapp.dto.UserRequest;
+import com.bank.bankapp.entity.User;
 import com.bank.bankapp.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,10 +53,10 @@ public class UserController {
 	// 	responseCode = "200",
 	// 	description = "Http service 200"
 	// )
-	// @GetMapping("/getAllUsers")
-	// public BankResponse <List<UserRequest>> getAllUser( ) {
-	// 	return new userService.getAllUsers();
-	// }
+	@GetMapping("/users")
+    public List<User> getAllUsers() {
+        return (List<User>) userService.getAllUsers();
+    }
 
 
 	@Operation(

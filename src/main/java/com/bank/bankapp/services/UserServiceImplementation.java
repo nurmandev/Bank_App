@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -122,10 +122,12 @@ public class UserServiceImplementation  implements UserService  {
 	//  LOGIN 
 	public BankResponse login(LoginDto loginDto){
 		Authentication authentication = null;
-		authentication = (Authentication) authenticationManager.authenticate(
+		authentication = authenticationManager.authenticate(
 			new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
 		);
 
+		System.out.println(jwtTokenProvider.generateToken(authentication));
+		
 		EmailDetails loginAlert = EmailDetails.builder()
 		.subject("You're logged in")
 		.recipient(loginDto.getEmail())
@@ -133,6 +135,8 @@ public class UserServiceImplementation  implements UserService  {
 		.build();
 
 		emailService.sendEmailAlert(loginAlert);
+
+
 		return BankResponse.builder()
 		.responseCode("Login success")
 		.responseMessage(jwtTokenProvider.generateToken(authentication))
@@ -371,7 +375,6 @@ public class UserServiceImplementation  implements UserService  {
 	// GET ALL USERS
 	@Override
 	public BankResponse getAllUsers() {
-		List<User> users = userRepository.findAll();
-		return (BankResponse) users;
-	}
+        return (BankResponse) userRepository.findAll();
+    }
 }
