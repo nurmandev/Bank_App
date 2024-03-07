@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bank.bankapp.dto.BankResponse;
 import com.bank.bankapp.dto.CreditDebitRequest;
 import com.bank.bankapp.dto.EnquiryRequest;
+import com.bank.bankapp.dto.GetAllUsers;
 import com.bank.bankapp.dto.LoginDto;
 import com.bank.bankapp.dto.TransferRequest;
 import com.bank.bankapp.dto.UserRequest;
@@ -41,6 +42,19 @@ public class UserController {
 		return "Hello";
 	}
 
+	// @Operation(
+	// 	summary = "Hello world",
+	// 	description = "Check if server is running"
+	// )
+	// @ApiResponse(
+	// 	responseCode = "200",
+	// 	description = "Http service 200"
+	// )
+	// @GetMapping("/getAllUsers")
+	// public BankResponse <List<UserRequest>> getAllUser( ) {
+	// 	return new userService.getAllUsers();
+	// }
+
 
 	@Operation(
 		summary = "Create New user Account",
@@ -50,7 +64,7 @@ public class UserController {
 		responseCode = "201",
 		description = "Http service 201 CREATED"
 	)
-	@PostMapping
+	@PostMapping("/register")
 	public BankResponse createAccount(@RequestBody  UserRequest userRequest) {
 		return userService.createAccount(userRequest);
 	}

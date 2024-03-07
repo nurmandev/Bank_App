@@ -50,10 +50,9 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authorize -> authorize
-        .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
+        .requestMatchers(HttpMethod.POST, "/api/user/**").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/user/login").permitAll()
-        .requestMatchers(HttpMethod.GET, "/swagger-ui/index.html").permitAll()
-        .requestMatchers(HttpMethod.POST, "/swagger-ui/index.html").permitAll()
+        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll() // Allow access to Swagger API endpoints and documentation
         .anyRequest().authenticated());
         
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

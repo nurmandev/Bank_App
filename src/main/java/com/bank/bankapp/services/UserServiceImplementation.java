@@ -2,6 +2,7 @@ package com.bank.bankapp.services;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
@@ -16,6 +17,7 @@ import com.bank.bankapp.dto.BankResponse;
 import com.bank.bankapp.dto.CreditDebitRequest;
 import com.bank.bankapp.dto.EmailDetails;
 import com.bank.bankapp.dto.EnquiryRequest;
+import com.bank.bankapp.dto.GetAllUsers;
 import com.bank.bankapp.dto.LoginDto;
 import com.bank.bankapp.dto.TransactionDto;
 import com.bank.bankapp.dto.TransferRequest;
@@ -363,5 +365,13 @@ public class UserServiceImplementation  implements UserService  {
 		.responseCode(AccountUtils.TRANSFER_SUCCESSFUl_CODE)
 			.responseMessage(AccountUtils.TRANSFER_SUCCESSFULLY_MESSAGE)
 			.accountInfo(null).build();		
+	}
+
+	
+	// GET ALL USERS
+	@Override
+	public BankResponse getAllUsers() {
+		List<User> users = userRepository.findAll();
+		return (BankResponse) users;
 	}
 }
