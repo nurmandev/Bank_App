@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 public class CustomeUserDetailsServices implements UserDetailsService{
 
     private UserRepository userRepository;
+    
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException( username + " not found"));

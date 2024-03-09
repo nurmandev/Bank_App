@@ -78,7 +78,7 @@ public class JwtTokenProvider {
         } catch (ExpiredJwtException | 
         IllegalArgumentException |
          SignatureException | MalformedJwtException e) {
-           throw new RuntimeException(e);
+           throw new RuntimeException(e.getMessage());
         }
     }
 }
