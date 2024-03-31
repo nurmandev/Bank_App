@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: postgres://bank_database_4t02_user:oCCLFPkrimkylHA2dzJYRTxSrLahIQZ4@dpg-cnktdgol6cac73a8huig-a/bank_database_4t02
+#    url: jdbc:postgresql://localhost:5432/bank_app
+    username: bank_database_4t02_user
+    password: oCCLFPkrimkylHA2dzJYRTxSrLahIQZ4
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+      database: postgresql
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
