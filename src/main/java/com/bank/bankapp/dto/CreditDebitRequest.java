@@ -13,6 +13,5 @@ public class CreditDebitRequest {
     private String accountNumber;
     private BigDecimal amount;
 
-    public String getAccountNumber() {
-    }
+
 }

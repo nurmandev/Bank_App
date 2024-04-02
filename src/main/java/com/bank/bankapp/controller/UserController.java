@@ -45,14 +45,14 @@ public class UserController {
 		return "Hello";
 	}
 
-	// @Operation(
-	// 	summary = "Hello world",
-	// 	description = "Check if server is running"
-	// )
-	// @ApiResponse(
-	// 	responseCode = "200",
-	// 	description = "Http service 200"
-	// )
+	 @Operation(
+	 	summary = "Hello world",
+	 	description = "Check if server is running"
+	 )
+	 @ApiResponse(
+	 	responseCode = "200",
+	 	description = "Http service 200"
+	 )
 	@GetMapping("/users")
     public List<User> getAllUsers() {
         return (List<User>) userService.getAllUsers();
