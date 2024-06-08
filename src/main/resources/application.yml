@@ -1,10 +1,9 @@
 spring:
   datasource:
-    url: postgres://bank_database_4t02_user:oCCLFPkrimkylHA2dzJYRTxSrLahIQZ4@dpg-cnktdgol6cac73a8huig-a/bank_database_4t02
-#    url: jdbc:postgresql://localhost:5432/bank_app
-    username: bank_database_4t02_user
-    password: oCCLFPkrimkylHA2dzJYRTxSrLahIQZ4
-    driver-class-name: org.postgresql.Driver
+    url: jdbc:mysql://sql8.freesqldatabase.com:3306/sql8712614
+    username: sql8712614
+    password:  zDBvB5XuZ4
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
@@ -13,5 +12,26 @@ spring:
     properties:
       hibernate:
         format_sql: true
-      database: postgresql
-      database-platform: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.MySQLDialect
+
+
+
+# spring:
+#   datasource:
+# #    url: postgres://bank_database_4t02_user:oCCLFPkrimkylHA2dzJYRTxSrLahIQZ4@dpg-cnktdgol6cac73a8huig-a/bank_database_4t02
+#     url: jdbc:postgresql://localhost:5432/bank_app
+# #    username: bank_database_4t02_user
+#     username: postgres
+#     password: admin
+# #    password: oCCLFPkrimkylHA2dzJYRTxSrLahIQZ4
+#     driver-class-name: org.postgresql.Driver
+
+#   jpa:
+#     hibernate:
+#       ddl-auto: update
+#     show-sql: true
+#     properties:
+#       hibernate:
+#         format_sql: true
+#       database: postgresql
+#       database-platform: org.hibernate.dialect.PostgreSQLDialect
